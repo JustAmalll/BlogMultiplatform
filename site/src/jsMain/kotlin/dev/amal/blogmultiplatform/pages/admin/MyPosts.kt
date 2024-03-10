@@ -7,14 +7,14 @@ import dev.amal.blogmultiplatform.util.isUserLoggedIn
 
 @Page
 @Composable
-fun HomePage() {
+fun MyPostsPage() {
     isUserLoggedIn {
-        HomeScreen()
+        MyPostsScreen()
     }
 }
 
 @Composable
-fun HomeScreen() {
+fun MyPostsScreen() {
     AdminPageLayout {
 
     }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.core.rememberPageContext
+import dev.amal.blogmultiplatform.navigation.Screen
 import kotlinx.browser.localStorage
 import org.w3c.dom.get
 
@@ -20,11 +21,16 @@ fun isUserLoggedIn(content: @Composable () -> Unit) {
         isUserExists = !userId.isNullOrEmpty() && checkUserId(id = userId)
 
         if (!isUserExists) {
-            context.router.navigateTo("/admin/login")
+            context.router.navigateTo(Screen.AdminLogin.route)
         }
     }
 
     if (isUserExists) {
         content()
     }
+}
+
+fun logout() {
+    localStorage.removeItem("userId")
+    localStorage.removeItem("username")
 }
