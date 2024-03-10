@@ -34,6 +34,7 @@ kotlin {
             implementation(libs.kobweb.core)
             implementation(libs.kobweb.silk)
             implementation(libs.silk.icons.fa)
+            implementation(libs.kotlinx.serialization)
         }
         jvmMain.dependencies {
             compileOnly(libs.kobweb.api)
