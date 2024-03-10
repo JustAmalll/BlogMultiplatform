@@ -33,8 +33,10 @@ import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.forms.Input
 import com.varabyte.kobweb.silk.components.forms.UnstyledInputVariant
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.style.toModifier
 import com.varabyte.kobweb.silk.components.text.SpanText
 import dev.amal.blogmultiplatform.models.JsTheme
+import dev.amal.blogmultiplatform.styles.LoginInputStyle
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Button
@@ -64,7 +66,8 @@ fun LoginScreen() {
                 src = "/logo.svg"
             )
             Input(
-                modifier = Modifier
+                modifier = LoginInputStyle
+                    .toModifier()
                     .margin(bottom = 12.px)
                     .width(350.px)
                     .height(54.px)
@@ -79,7 +82,8 @@ fun LoginScreen() {
                 variant = UnstyledInputVariant
             )
             Input(
-                modifier = Modifier
+                modifier = LoginInputStyle
+                    .toModifier()
                     .margin(bottom = 24.px)
                     .width(350.px)
                     .height(54.px)
@@ -102,7 +106,7 @@ fun LoginScreen() {
                     .color(Colors.White)
                     .borderRadius(r = 4.px)
                     .fontWeight(FontWeight.Medium)
-                    .fontSize(16.px)
+                    .fontSize(14.px)
                     .border(width = 0.px)
                     .cursor(Cursor.Pointer)
                     .toAttrs()
