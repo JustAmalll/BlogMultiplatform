@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
@@ -24,6 +25,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.width
@@ -36,17 +38,27 @@ import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.style.toModifier
 import com.varabyte.kobweb.silk.components.text.SpanText
 import dev.amal.blogmultiplatform.models.JsTheme
+import dev.amal.blogmultiplatform.models.User
+import dev.amal.blogmultiplatform.models.UserWithoutPassword
 import dev.amal.blogmultiplatform.styles.LoginInputStyle
+import dev.amal.blogmultiplatform.util.checkUserExistence
+import kotlinx.browser.localStorage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Button
+import org.w3c.dom.set
 
 @Page
 @Composable
 fun LoginScreen() {
     val scope = rememberCoroutineScope()
     val context = rememberPageContext()
-    val errorText by remember { mutableStateOf(" ") }
+
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var errorText by remember { mutableStateOf<String?>(null) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -76,8 +88,11 @@ fun LoginScreen() {
                     .backgroundColor(Colors.White)
                     .fontSize(14.px),
                 type = InputType.Text,
-                value = "",
-                onValueChanged = {},
+                value = username,
+                onValueChanged = {
+                    username = it
+                    errorText = null
+                },
                 placeholder = "Username",
                 variant = UnstyledInputVariant
             )
@@ -92,8 +107,11 @@ fun LoginScreen() {
                     .backgroundColor(Colors.White)
                     .fontSize(14.px),
                 type = InputType.Password,
-                value = "",
-                onValueChanged = {},
+                value = password,
+                onValueChanged = {
+                    password = it
+                    errorText = null
+                },
                 placeholder = "Password",
                 variant = UnstyledInputVariant
             )
@@ -109,6 +127,23 @@ fun LoginScreen() {
                     .fontSize(14.px)
                     .border(width = 0.px)
                     .cursor(Cursor.Pointer)
+                    .onClick {
+                        scope.launch {
+                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                                val user = checkUserExistence(
+                                    user = User(username = username, password = password)
+                                )
+                                if (user != null) {
+                                    rememberLoggedIn(remember = true, user = user)
+                                    context.router.navigateTo("admin/home")
+                                } else {
+                                    errorText = "The user doesn't exist."
+                                }
+                            } else {
+                                errorText = "Input fields are empty."
+                            }
+                        }
+                    }
                     .toAttrs()
             ) {
                 SpanText(text = "Sign in")
@@ -118,8 +153,20 @@ fun LoginScreen() {
                     .width(350.px)
                     .color(Colors.Red)
                     .textAlign(TextAlign.Center),
-                text = errorText
+                text = errorText ?: ""
             )
         }
+    }
+}
+
+private fun rememberLoggedIn(
+    remember: Boolean,
+    user: UserWithoutPassword? = null
+) {
+    localStorage["remember"] = remember.toString()
+
+    if (user != null) {
+        localStorage["userId"] = user.id
+        localStorage["username"] = user.username
     }
 }
