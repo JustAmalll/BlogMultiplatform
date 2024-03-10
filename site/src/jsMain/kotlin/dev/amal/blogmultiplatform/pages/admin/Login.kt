@@ -43,7 +43,6 @@ import dev.amal.blogmultiplatform.models.UserWithoutPassword
 import dev.amal.blogmultiplatform.styles.LoginInputStyle
 import dev.amal.blogmultiplatform.util.checkUserExistence
 import kotlinx.browser.localStorage
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.px
@@ -135,7 +134,7 @@ fun LoginScreen() {
                                 )
                                 if (user != null) {
                                     rememberLoggedIn(remember = true, user = user)
-                                    context.router.navigateTo("admin/home")
+                                    context.router.navigateTo("admin")
                                 } else {
                                     errorText = "The user doesn't exist."
                                 }
@@ -153,7 +152,7 @@ fun LoginScreen() {
                     .width(350.px)
                     .color(Colors.Red)
                     .textAlign(TextAlign.Center),
-                text = errorText ?: ""
+                text = errorText ?: " "
             )
         }
     }
@@ -166,7 +165,7 @@ private fun rememberLoggedIn(
     localStorage["remember"] = remember.toString()
 
     if (user != null) {
-        localStorage["userId"] = user.id
+        localStorage["userId"] = user._id
         localStorage["username"] = user.username
     }
 }
