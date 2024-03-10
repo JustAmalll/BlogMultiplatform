@@ -17,5 +17,15 @@ suspend fun checkUserExistence(user: User): UserWithoutPassword? = try {
     null
 }
 
+suspend fun checkUserId(id: String): Boolean = try {
+    window.api.tryPost(
+        apiPath = "checkuserid",
+        body = Json.encodeToString(value = id).encodeToByteArray()
+    )?.decodeToString().parseData()
+} catch (exception: Exception) {
+    println(exception.message)
+    false
+}
+
 inline fun <reified T> String?.parseData(): T =
     Json.decodeFromString(string = toString())

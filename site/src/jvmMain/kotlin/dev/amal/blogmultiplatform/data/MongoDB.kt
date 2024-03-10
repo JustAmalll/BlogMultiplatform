@@ -34,4 +34,11 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
         context.logger.error(message = exception.message.toString())
         null
     }
+
+    override suspend fun checkUserId(id: String): Boolean = try {
+        userCollection.find<User>(Filters.eq(User::_id.name, id)).firstOrNull() != null
+    } catch (exception: Exception) {
+        context.logger.error(message = exception.message.toString())
+        false
+    }
 }

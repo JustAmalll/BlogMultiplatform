@@ -133,8 +133,9 @@ fun LoginScreen() {
                                     user = User(username = username, password = password)
                                 )
                                 if (user != null) {
-                                    rememberLoggedIn(remember = true, user = user)
-                                    context.router.navigateTo("admin")
+                                    localStorage["userId"] = user._id
+                                    localStorage["username"] = user.username
+                                    context.router.navigateTo("/admin")
                                 } else {
                                     errorText = "The user doesn't exist."
                                 }
@@ -155,17 +156,5 @@ fun LoginScreen() {
                 text = errorText ?: " "
             )
         }
-    }
-}
-
-private fun rememberLoggedIn(
-    remember: Boolean,
-    user: UserWithoutPassword? = null
-) {
-    localStorage["remember"] = remember.toString()
-
-    if (user != null) {
-        localStorage["userId"] = user._id
-        localStorage["username"] = user.username
     }
 }
