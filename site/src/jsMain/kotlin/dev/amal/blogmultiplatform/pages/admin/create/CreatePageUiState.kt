@@ -1,5 +1,6 @@
 package dev.amal.blogmultiplatform.pages.admin.create
 
+import dev.amal.blogmultiplatform.models.Category
 
 data class CreatePageUiState(
     val id: String = "",
@@ -8,6 +9,7 @@ data class CreatePageUiState(
     val thumbnail: String = "",
     val thumbnailInputDisabled: Boolean = true,
     val content: String = "",
+    val category: Category = Category.Programming,
     val buttonText: String = "Create",
     val popular: Boolean = false,
     val main: Boolean = false,
@@ -23,6 +25,7 @@ data class CreatePageUiState(
         subtitle = "",
         thumbnail = "",
         content = "",
+        category = Category.Programming,
         buttonText = "Create",
         main = false,
         popular = false,
