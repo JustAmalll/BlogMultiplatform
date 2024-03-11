@@ -8,7 +8,6 @@ import dev.amal.blogmultiplatform.models.UserWithoutPassword
 import dev.amal.blogmultiplatform.util.Constants.HUMOR_API_URL
 import kotlinx.browser.localStorage
 import kotlinx.browser.window
-import kotlinx.coroutines.delay
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.w3c.dom.get
@@ -39,7 +38,6 @@ suspend fun checkUserId(id: String): Boolean = try {
 suspend fun fetchRandomJoke(): RandomJoke = try {
     val date = localStorage["date"]
     val savedJoke = localStorage["joke"]
-    delay(3000)
 
     val currentTime = Date.now()
     val dayHasPassed = date != null && currentTime - date.toDouble() >= 24.hours.inWholeMilliseconds

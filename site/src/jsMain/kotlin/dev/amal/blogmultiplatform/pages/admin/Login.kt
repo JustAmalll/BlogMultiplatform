@@ -32,15 +32,11 @@ import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
-import com.varabyte.kobweb.silk.components.forms.Input
-import com.varabyte.kobweb.silk.components.forms.UnstyledInputVariant
 import com.varabyte.kobweb.silk.components.graphics.Image
-import com.varabyte.kobweb.silk.components.style.toModifier
 import com.varabyte.kobweb.silk.components.text.SpanText
+import dev.amal.blogmultiplatform.components.Input
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.models.User
-import dev.amal.blogmultiplatform.models.UserWithoutPassword
-import dev.amal.blogmultiplatform.styles.LoginInputStyle
 import dev.amal.blogmultiplatform.util.checkUserExistence
 import kotlinx.browser.localStorage
 import kotlinx.coroutines.launch
@@ -77,42 +73,29 @@ fun LoginScreen() {
                 src = "/logo.svg"
             )
             Input(
-                modifier = LoginInputStyle
-                    .toModifier()
-                    .margin(bottom = 12.px)
+                modifier = Modifier
                     .width(350.px)
-                    .height(54.px)
-                    .borderRadius(r = 4.px)
-                    .padding(leftRight = 20.px)
-                    .backgroundColor(Colors.White)
-                    .fontSize(14.px),
-                type = InputType.Text,
+                    .margin(bottom = 24.px),
                 value = username,
                 onValueChanged = {
                     username = it
                     errorText = null
                 },
                 placeholder = "Username",
-                variant = UnstyledInputVariant
+                backgroundColor = Colors.White
             )
             Input(
-                modifier = LoginInputStyle
-                    .toModifier()
-                    .margin(bottom = 24.px)
+                modifier = Modifier
                     .width(350.px)
-                    .height(54.px)
-                    .borderRadius(r = 4.px)
-                    .padding(leftRight = 20.px)
-                    .backgroundColor(Colors.White)
-                    .fontSize(14.px),
-                type = InputType.Password,
+                    .margin(bottom = 24.px),
                 value = password,
                 onValueChanged = {
                     password = it
                     errorText = null
                 },
                 placeholder = "Password",
-                variant = UnstyledInputVariant
+                type = InputType.Password,
+                backgroundColor = Colors.White
             )
             Button(
                 attrs = Modifier
