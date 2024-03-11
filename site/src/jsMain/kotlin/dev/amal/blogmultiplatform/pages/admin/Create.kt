@@ -25,7 +25,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
-import com.varabyte.kobweb.compose.ui.modifiers.id
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
@@ -34,17 +33,20 @@ import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.forms.Input
-import com.varabyte.kobweb.silk.components.forms.Switch
 import com.varabyte.kobweb.silk.components.forms.SwitchSize
+import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.style.breakpoint.Breakpoint
+import com.varabyte.kobweb.silk.components.style.toModifier
 import com.varabyte.kobweb.silk.components.text.SpanText
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import dev.amal.blogmultiplatform.components.AdminPageLayout
 import dev.amal.blogmultiplatform.components.LabeledSwitch
 import dev.amal.blogmultiplatform.models.Category
+import dev.amal.blogmultiplatform.models.EditorControl
 import dev.amal.blogmultiplatform.models.JsTheme
+import dev.amal.blogmultiplatform.styles.EditorKeyStyle
 import dev.amal.blogmultiplatform.util.Constants.FONT_FAMILY
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
@@ -56,7 +58,6 @@ import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Li
 import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.dom.Ul
-import org.w3c.dom.HTMLInputElement
 
 @Page
 @Composable
@@ -144,6 +145,13 @@ fun CreateScreen() {
                     thumbnail = "",
                     thumbnailInputDisabled = true,
                     onThumbnailSelect = { filename, file -> }
+                )
+                EditorControls(
+                    breakpoint = breakpoint,
+                    editorVisibility = true,
+                    onEditorVisibilityChange = {},
+                    onLinkClick = {},
+                    onImageClick = {}
                 )
             }
         }
@@ -272,5 +280,93 @@ fun ThumbnailUploader(
         ) {
             SpanText(text = "Upload")
         }
+    }
+}
+
+@Composable
+fun EditorControls(
+    breakpoint: Breakpoint,
+    editorVisibility: Boolean,
+    onLinkClick: () -> Unit,
+    onImageClick: () -> Unit,
+    onEditorVisibilityChange: () -> Unit
+) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        SimpleGrid(
+            modifier = Modifier.fillMaxWidth(),
+            numColumns = numColumns(base = 1, sm = 2)
+        ) {
+            Row(
+                modifier = Modifier
+                    .backgroundColor(JsTheme.LightGray.rgb)
+                    .borderRadius(r = 4.px)
+                    .height(54.px)
+            ) {
+                EditorControl.entries.forEach {
+                    EditorControlView(
+                        control = it,
+                        onClick = {}
+                    )
+                }
+            }
+            Box(contentAlignment = Alignment.CenterEnd) {
+                Button(
+                    attrs = Modifier
+                        .height(54.px)
+                        .thenIf(
+                            condition = breakpoint < Breakpoint.SM,
+                            other = Modifier.fillMaxWidth()
+                        )
+                        .margin(topBottom = if (breakpoint < Breakpoint.SM) 12.px else 0.px)
+                        .padding(leftRight = 24.px)
+                        .borderRadius(r = 4.px)
+                        .backgroundColor(
+                            if (editorVisibility) {
+                                JsTheme.LightGray.rgb
+                            } else {
+                                JsTheme.Primary.rgb
+                            }
+                        )
+                        .color(
+                            if (editorVisibility) {
+                                JsTheme.DarkGray.rgb
+                            } else {
+                                Colors.White
+                            }
+                        )
+                        .onClick {}
+                        .toAttrs()
+                ) {
+                    SpanText(
+                        modifier = Modifier
+                            .fontFamily(FONT_FAMILY)
+                            .fontWeight(FontWeight.Medium)
+                            .fontSize(14.px),
+                        text = "Preview"
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun EditorControlView(
+    control: EditorControl,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = EditorKeyStyle.toModifier()
+            .fillMaxHeight()
+            .padding(leftRight = 12.px)
+            .borderRadius(r = 4.px)
+            .cursor(Cursor.Pointer)
+            .onClick { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            src = control.icon,
+            alt = "${control.name} Icon"
+        )
     }
 }

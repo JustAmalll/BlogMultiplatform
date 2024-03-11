@@ -19,5 +19,15 @@ object Res {
         const val CREATE = "/create.svg"
         const val POSTS = "/posts.svg"
         const val LOGOUT = "/logout.svg"
+
+        const val BOLD = "/bold.svg"
+        const val ITALIC = "/italic.svg"
+        const val LINK = "/link.svg"
+        const val TITLE = "/title.svg"
+        const val SUBTITLE = "/subtitle.svg"
+        const val QUOTE = "/quote.svg"
+        const val CODE = "/code.svg"
+        const val IMAGE = "/image.svg"
+        const val CHECKMARK = "/checkmark.svg"
     }
 }
