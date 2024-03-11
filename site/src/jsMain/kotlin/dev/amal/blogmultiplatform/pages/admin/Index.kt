@@ -1,6 +1,11 @@
 package dev.amal.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
@@ -42,6 +47,7 @@ import dev.amal.blogmultiplatform.navigation.Screen
 import dev.amal.blogmultiplatform.util.Constants.FONT_FAMILY
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.Res
+import dev.amal.blogmultiplatform.util.fetchRandomJoke
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.percent
@@ -57,7 +63,14 @@ fun HomePage() {
 
 @Composable
 fun HomeScreen() {
+    var randomJoke: RandomJoke? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(Unit) {
+        randomJoke = fetchRandomJoke()
+    }
+
     AdminPageLayout {
+        HomeContent(randomJoke = randomJoke)
         AddButton()
     }
 }
