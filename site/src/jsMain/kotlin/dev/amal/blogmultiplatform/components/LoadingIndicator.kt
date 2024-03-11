@@ -7,6 +7,7 @@ import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.classNames
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.modifiers.role
 import com.varabyte.kobweb.compose.ui.toAttrs
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Div
@@ -24,11 +25,12 @@ fun LoadingIndicator(modifier: Modifier = Modifier) {
         Div(
             attrs = Modifier
                 .classNames("spinner-border", "text-primary")
+                .role("status")
                 .toAttrs()
         ) {
             Span(
                 attrs = Modifier
-                    .classNames("visually-hidden")
+                    .classNames("sr-only")
                     .toAttrs()
             ) {
                 Text("Loading...")

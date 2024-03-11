@@ -98,8 +98,7 @@ fun HomeContent(randomJoke: RandomJoke?) {
                         modifier = Modifier
                             .size(150.px)
                             .margin(bottom = 50.px),
-                        src = Res.Image.LAUGH,
-                        alt = "Laugh Image"
+                        src = Res.Image.LAUGH
                     )
                 }
                 if (randomJoke.joke.contains("Q:")) {
