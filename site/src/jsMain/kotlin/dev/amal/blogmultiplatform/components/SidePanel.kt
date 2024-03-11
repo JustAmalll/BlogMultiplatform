@@ -11,22 +11,18 @@ import com.varabyte.kobweb.compose.css.CSSTransition
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.ScrollBehavior
-import com.varabyte.kobweb.compose.css.functions.CSSFilter
 import com.varabyte.kobweb.compose.css.functions.brightness
 import com.varabyte.kobweb.compose.css.functions.contrast
 import com.varabyte.kobweb.compose.css.functions.hueRotate
 import com.varabyte.kobweb.compose.css.functions.invert
 import com.varabyte.kobweb.compose.css.functions.saturate
 import com.varabyte.kobweb.compose.css.functions.sepia
-import com.varabyte.kobweb.compose.dom.svg.Svg
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Colors
-import com.varabyte.kobweb.compose.ui.modifiers.accentColor
-import com.varabyte.kobweb.compose.ui.modifiers.background
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
@@ -34,7 +30,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.filter
-import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
@@ -47,7 +42,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
 import com.varabyte.kobweb.compose.ui.modifiers.transition
 import com.varabyte.kobweb.compose.ui.modifiers.translateX
 import com.varabyte.kobweb.compose.ui.modifiers.width
-import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.graphics.Image
@@ -60,7 +54,6 @@ import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.navigation.Screen
 import dev.amal.blogmultiplatform.util.Constants.COLLAPSED_PANEL_HEIGHT
-import dev.amal.blogmultiplatform.util.Constants.FONT_FAMILY
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.Res
 import dev.amal.blogmultiplatform.util.logout
@@ -109,7 +102,6 @@ fun NavigationItems() {
     SpanText(
         modifier = Modifier
             .margin(bottom = 30.px)
-            .fontFamily(FONT_FAMILY)
             .fontSize(14.px)
             .color(JsTheme.HalfWhite.rgb),
         text = "Dashboard"
@@ -177,7 +169,6 @@ private fun NavigationItem(
         )
         SpanText(
             modifier = Modifier
-                .fontFamily(FONT_FAMILY)
                 .fontSize(16.px)
                 .color(if (selected) JsTheme.Primary.rgb else Colors.White),
             text = title

@@ -1,9 +1,9 @@
 package dev.amal.blogmultiplatform.util
 
 object Constants {
-    const val FONT_FAMILY = "Roboto"
     const val SIDE_PANEL_WIDTH = 250
     const val COLLAPSED_PANEL_HEIGHT = 100
+
     const val HUMOR_API_URL =
         "https://api.humorapi.com/jokes/random?api-key=f0cac1365ead42e58b2ee94684b45b56&max-length=180"
 }

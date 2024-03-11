@@ -4,10 +4,15 @@ import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.browser.file.loadDataUrlFromDisk
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
+import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.Resize
+import com.varabyte.kobweb.compose.css.ScrollBehavior
+import com.varabyte.kobweb.compose.css.Visibility
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.style.KobwebComposeStyleSheet.attr
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.attrsModifier
@@ -25,10 +30,17 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.height
+import com.varabyte.kobweb.compose.ui.modifiers.id
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.maxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
+import com.varabyte.kobweb.compose.ui.modifiers.onKeyDown
+import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.modifiers.resize
+import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
+import com.varabyte.kobweb.compose.ui.modifiers.visibility
 import com.varabyte.kobweb.compose.ui.thenIf
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
@@ -47,7 +59,6 @@ import dev.amal.blogmultiplatform.models.Category
 import dev.amal.blogmultiplatform.models.EditorControl
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.styles.EditorKeyStyle
-import dev.amal.blogmultiplatform.util.Constants.FONT_FAMILY
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import kotlinx.browser.document
@@ -55,8 +66,10 @@ import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Button
+import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Li
 import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.TextArea
 import org.jetbrains.compose.web.dom.Ul
 
 @Page
@@ -124,7 +137,7 @@ fun CreateScreen() {
                         .padding(leftRight = 20.px)
                         .backgroundColor(JsTheme.LightGray.rgb)
                         .borderRadius(r = 4.px)
-                        .fontFamily(FONT_FAMILY)
+                        
                         .fontSize(16.px),
                     placeholder = "Subtitle"
                 )
@@ -184,7 +197,7 @@ fun CategoryDropdown(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fontSize(16.px)
-                    .fontFamily(FONT_FAMILY),
+                    ,
                 text = selectedCategory.name
             )
             Box(modifier = Modifier.classNames("dropdown-toggle"))
@@ -201,7 +214,7 @@ fun CategoryDropdown(
                         attrs = Modifier
                             .classNames("dropdown-item")
                             .color(Colors.Black)
-                            .fontFamily(FONT_FAMILY)
+                            
                             .fontSize(16.px)
                             .onClick { onCategorySelect(category) }
                             .toAttrs()
@@ -236,7 +249,7 @@ fun ThumbnailUploader(
                 .padding(leftRight = 20.px)
                 .backgroundColor(JsTheme.LightGray.rgb)
                 .borderRadius(r = 4.px)
-                .fontFamily(FONT_FAMILY)
+                
                 .fontSize(16.px)
                 .thenIf(
                     condition = thumbnailInputDisabled,
@@ -269,7 +282,7 @@ fun ThumbnailUploader(
                     }
                 )
                 .borderRadius(r = 4.px)
-                .fontFamily(FONT_FAMILY)
+                
                 .fontWeight(FontWeight.Medium)
                 .fontSize(14.px)
                 .thenIf(
@@ -339,7 +352,7 @@ fun EditorControls(
                 ) {
                     SpanText(
                         modifier = Modifier
-                            .fontFamily(FONT_FAMILY)
+                            
                             .fontWeight(FontWeight.Medium)
                             .fontSize(14.px),
                         text = "Preview"
@@ -368,5 +381,83 @@ fun EditorControlView(
             src = control.icon,
             alt = "${control.name} Icon"
         )
+    }
+}
+
+@Composable
+fun Editor(editorVisibility: Boolean) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        TextArea(
+            attrs = Modifier
+                .fillMaxWidth()
+                .height(400.px)
+                .maxHeight(400.px)
+                .resize(Resize.None)
+                .margin(top = 8.px)
+                .padding(all = 20.px)
+                .backgroundColor(JsTheme.LightGray.rgb)
+                .borderRadius(r = 4.px)
+                .visibility(
+                    if (editorVisibility) {
+                        Visibility.Visible
+                    } else {
+                        Visibility.Hidden
+                    }
+                )
+                .onKeyDown {
+//                    if (it.code == "Enter" && it.shiftKey) {
+//                        applyStyle(
+//                            controlStyle = ControlStyle.Break(
+//                                selectedText = getSelectedText()
+//                            )
+//                        )
+//                    }
+                }
+                
+                .fontSize(16.px)
+                .toAttrs { attr("placeholder", "Type here...") }
+        )
+        Div(
+            attrs = Modifier
+                .fillMaxWidth()
+                .height(400.px)
+                .maxHeight(400.px)
+                .margin(top = 8.px)
+                .padding(all = 20.px)
+                .backgroundColor(JsTheme.LightGray.rgb)
+                .borderRadius(r = 4.px)
+                .visibility(
+                    if (editorVisibility) {
+                        Visibility.Hidden
+                    } else {
+                        Visibility.Visible
+                    }
+                )
+                .overflow(Overflow.Auto)
+                .scrollBehavior(ScrollBehavior.Smooth)
+                .toAttrs()
+        )
+    }
+}
+
+@Composable
+fun CreateButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Button(
+        attrs = Modifier
+            .onClick { onClick() }
+            .fillMaxWidth()
+            .height(54.px)
+            .margin(top = 24.px)
+            .backgroundColor(JsTheme.Primary.rgb)
+            .color(Colors.White)
+            .borderRadius(r = 4.px)
+            
+            .fontSize(16.px)
+            .toAttrs()
+    ) {
+        SpanText(text = text)
     }
 }

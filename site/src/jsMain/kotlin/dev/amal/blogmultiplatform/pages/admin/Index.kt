@@ -21,7 +21,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.margin
@@ -44,7 +43,6 @@ import dev.amal.blogmultiplatform.components.LoadingIndicator
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.models.RandomJoke
 import dev.amal.blogmultiplatform.navigation.Screen
-import dev.amal.blogmultiplatform.util.Constants.FONT_FAMILY
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.Res
 import dev.amal.blogmultiplatform.util.fetchRandomJoke
@@ -109,7 +107,7 @@ fun HomeContent(randomJoke: RandomJoke?) {
                             .textAlign(TextAlign.Center)
                             .color(JsTheme.Secondary.rgb)
                             .fontSize(28.px)
-                            .fontFamily(FONT_FAMILY)
+                            
                             .fontWeight(FontWeight.Bold),
                         text = randomJoke.joke.split(":")[1].dropLast(1)
                     )
@@ -119,7 +117,7 @@ fun HomeContent(randomJoke: RandomJoke?) {
                             .textAlign(TextAlign.Center)
                             .color(JsTheme.HalfBlack.rgb)
                             .fontSize(20.px)
-                            .fontFamily(FONT_FAMILY)
+                            
                             .fontWeight(FontWeight.Normal),
                         text = randomJoke.joke.split(":").last()
                     )
@@ -130,7 +128,7 @@ fun HomeContent(randomJoke: RandomJoke?) {
                             .fillMaxWidth(40.percent)
                             .textAlign(TextAlign.Center)
                             .color(JsTheme.Secondary.rgb)
-                            .fontFamily(FONT_FAMILY)
+                            
                             .fontSize(28.px)
                             .fontWeight(FontWeight.Bold),
                         text = randomJoke.joke
