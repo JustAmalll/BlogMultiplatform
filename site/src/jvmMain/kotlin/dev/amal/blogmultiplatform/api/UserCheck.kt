@@ -13,13 +13,16 @@ import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 
 @Api(routeOverride = "usercheck")
-suspend fun userCheck(context: ApiContext) {
+suspend fun userCheck(
+    context: ApiContext,
+    database: MongoDB = context.data.getValue<MongoDB>()
+) {
     try {
         val userRequest = context.req.body?.decodeToString()?.let {
             Json.decodeFromString<User>(it)
         }
         val user = userRequest?.let {
-            context.data.getValue<MongoDB>().checkUserExistence(
+            database.checkUserExistence(
                 User(
                     username = it.username,
                     password = hashPassword(password = it.password)
@@ -44,14 +47,15 @@ suspend fun userCheck(context: ApiContext) {
 }
 
 @Api(routeOverride = "checkuserid")
-suspend fun checkUserId(context: ApiContext) {
+suspend fun checkUserId(
+    context: ApiContext,
+    database: MongoDB = context.data.getValue<MongoDB>()
+) {
     try {
         val idRequest = context.req.body?.decodeToString()?.let {
             Json.decodeFromString<String>(it)
         }
-        val result = idRequest?.let {
-            context.data.getValue<MongoDB>().checkUserId(it)
-        }
+        val result = idRequest?.let { database.checkUserId(it) }
         context.res.setBodyText(Json.encodeToString(value = result ?: false))
     } catch (exception: Exception) {
         context.res.setBodyText(Json.encodeToString(value = false))

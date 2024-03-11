@@ -11,6 +11,7 @@ object Constants {
 object Res {
     object Image {
         const val LOGO = "/logo.svg"
+        const val LAUGH = "/laugh.png"
     }
 
     object Icon {
