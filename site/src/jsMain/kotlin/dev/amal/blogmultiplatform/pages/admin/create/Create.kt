@@ -17,6 +17,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.forms.SwitchSize
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
@@ -28,6 +29,7 @@ import dev.amal.blogmultiplatform.components.Input
 import dev.amal.blogmultiplatform.components.LabeledSwitch
 import dev.amal.blogmultiplatform.components.MessagePopup
 import dev.amal.blogmultiplatform.models.Post
+import dev.amal.blogmultiplatform.navigation.Screen
 import dev.amal.blogmultiplatform.pages.admin.create.components.CategoryDropdown
 import dev.amal.blogmultiplatform.pages.admin.create.components.Editor
 import dev.amal.blogmultiplatform.pages.admin.create.components.EditorControls
@@ -54,6 +56,7 @@ fun CreatePage() {
 
 @Composable
 fun CreateScreen() {
+    val context = rememberPageContext()
     val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
     var uiState by remember { mutableStateOf(CreatePageUiState()) }
@@ -168,7 +171,7 @@ fun CreateScreen() {
                                 uiState.thumbnail.isNotEmpty() &&
                                 uiState.content.isNotEmpty()
                             ) {
-                                addPost(
+                                val result = addPost(
                                     Post(
                                         author = localStorage["username"].toString(),
                                         title = uiState.title,
@@ -182,6 +185,9 @@ fun CreateScreen() {
                                         sponsored = uiState.sponsored
                                     )
                                 )
+                                if (result) {
+                                    context.router.navigateTo(Screen.AdminSuccess.route)
+                                }
                             } else {
                                 uiState = uiState.copy(messagePopup = true)
                                 delay(2000)
