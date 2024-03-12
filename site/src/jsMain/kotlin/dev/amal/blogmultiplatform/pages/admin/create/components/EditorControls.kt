@@ -26,11 +26,8 @@ import dev.amal.blogmultiplatform.components.Button
 import dev.amal.blogmultiplatform.models.EditorControl
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.styles.EditorKeyStyle
-import dev.amal.blogmultiplatform.util.Id
 import dev.amal.blogmultiplatform.util.applyControlStyle
-import kotlinx.browser.document
 import org.jetbrains.compose.web.css.px
-import org.w3c.dom.HTMLTextAreaElement
 
 @Composable
 fun EditorControls(
@@ -55,18 +52,11 @@ fun EditorControls(
                     EditorControlView(
                         control = it,
                         onClick = {
-                            val editor = document.getElementById(Id.EDITOR)
-                            val editorPreview = document.getElementById(Id.EDITOR_PREVIEW)
-
-                            if (editor != null && editorPreview != null) {
-                                applyControlStyle(
-                                    editor = editor as HTMLTextAreaElement,
-                                    editorPreview = editorPreview,
-                                    editorControl = it,
-                                    onLinkClick = onLinkClick,
-                                    onImageClick = onImageClick
-                                )
-                            }
+                            applyControlStyle(
+                                editorControl = it,
+                                onLinkClick = onLinkClick,
+                                onImageClick = onImageClick
+                            )
                         }
                     )
                 }

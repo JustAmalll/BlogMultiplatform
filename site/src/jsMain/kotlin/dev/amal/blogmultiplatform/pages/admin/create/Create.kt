@@ -25,9 +25,12 @@ import com.varabyte.kobweb.silk.components.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import dev.amal.blogmultiplatform.components.AdminPageLayout
 import dev.amal.blogmultiplatform.components.Button
+import dev.amal.blogmultiplatform.components.ControlPopup
 import dev.amal.blogmultiplatform.components.Input
 import dev.amal.blogmultiplatform.components.LabeledSwitch
 import dev.amal.blogmultiplatform.components.MessagePopup
+import dev.amal.blogmultiplatform.models.ControlStyle
+import dev.amal.blogmultiplatform.models.EditorControl
 import dev.amal.blogmultiplatform.models.Post
 import dev.amal.blogmultiplatform.navigation.Screen
 import dev.amal.blogmultiplatform.pages.admin.create.components.CategoryDropdown
@@ -37,6 +40,8 @@ import dev.amal.blogmultiplatform.pages.admin.create.components.ThumbnailUploade
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.Id
 import dev.amal.blogmultiplatform.util.addPost
+import dev.amal.blogmultiplatform.util.applyStyle
+import dev.amal.blogmultiplatform.util.getSelectedText
 import dev.amal.blogmultiplatform.util.getTextAreaValueById
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import kotlinx.browser.localStorage
@@ -203,6 +208,15 @@ fun CreateScreen() {
         MessagePopup(
             message = "Please fill out all fields.",
             onDialogDismiss = { uiState = uiState.copy(messagePopup = false) }
+        )
+    }
+    if (uiState.linkPopup) {
+        ControlPopup(
+            editorControl = EditorControl.Link,
+            onDialogDismiss = { uiState = uiState.copy(linkPopup = false) },
+            onAddClick = { href, _ ->
+                applyStyle(ControlStyle.Link(selectedText = getSelectedText(), href = href))
+            }
         )
     }
 }

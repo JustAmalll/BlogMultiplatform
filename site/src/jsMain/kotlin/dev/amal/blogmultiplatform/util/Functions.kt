@@ -12,7 +12,6 @@ import dev.amal.blogmultiplatform.models.EditorControl
 import dev.amal.blogmultiplatform.navigation.Screen
 import kotlinx.browser.document
 import kotlinx.browser.localStorage
-import org.w3c.dom.Element
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.get
 
@@ -49,16 +48,16 @@ fun getSelectedIntRange(editor: HTMLTextAreaElement): IntRange? {
     return IntRange(start = start, endInclusive = (end - 1))
 }
 
-fun getSelectedText(editor: HTMLTextAreaElement): String? {
+fun getSelectedText(): String? {
+    val editor = document.getElementById(Id.EDITOR) as? HTMLTextAreaElement ?: return null
     val range = getSelectedIntRange(editor = editor) ?: return null
     return editor.value.substring(range)
 }
 
-fun applyStyle(
-    editor: HTMLTextAreaElement,
-    editorPreview: Element,
-    controlStyle: ControlStyle
-) {
+fun applyStyle(controlStyle: ControlStyle) {
+    val editor = document.getElementById(Id.EDITOR) as? HTMLTextAreaElement ?: return
+    val editorPreview = document.getElementById(Id.EDITOR_PREVIEW) ?: return
+
     editor.value = editor.value.replaceRange(
         range = getSelectedIntRange(editor = editor) ?: return,
         replacement = controlStyle.style
@@ -68,16 +67,11 @@ fun applyStyle(
 
 fun applyControlStyle(
     editorControl: EditorControl,
-    editor: HTMLTextAreaElement,
-    editorPreview: Element,
     onLinkClick: () -> Unit,
     onImageClick: () -> Unit
 ) {
-    val selectedText = getSelectedText(editor = editor)
-
-    val applyStyle: (ControlStyle) -> Unit = {
-        applyStyle(editor = editor, editorPreview = editorPreview, controlStyle = it)
-    }
+    val selectedText = getSelectedText()
+    if (selectedText.isNullOrEmpty()) return
 
     when (editorControl) {
         EditorControl.Bold -> applyStyle(ControlStyle.Bold(selectedText = selectedText))
