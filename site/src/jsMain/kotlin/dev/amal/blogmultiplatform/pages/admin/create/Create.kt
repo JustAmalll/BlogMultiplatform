@@ -17,7 +17,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.core.Page
-import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.forms.SwitchSize
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
@@ -27,6 +26,7 @@ import dev.amal.blogmultiplatform.components.AdminPageLayout
 import dev.amal.blogmultiplatform.components.Button
 import dev.amal.blogmultiplatform.components.Input
 import dev.amal.blogmultiplatform.components.LabeledSwitch
+import dev.amal.blogmultiplatform.components.MessagePopup
 import dev.amal.blogmultiplatform.models.Post
 import dev.amal.blogmultiplatform.pages.admin.create.components.CategoryDropdown
 import dev.amal.blogmultiplatform.pages.admin.create.components.Editor
@@ -38,6 +38,7 @@ import dev.amal.blogmultiplatform.util.addPost
 import dev.amal.blogmultiplatform.util.getTextAreaValueById
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import kotlinx.browser.localStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.px
 import org.w3c.dom.get
@@ -54,7 +55,6 @@ fun CreatePage() {
 @Composable
 fun CreateScreen() {
     val scope = rememberCoroutineScope()
-    val context = rememberPageContext()
     val breakpoint = rememberBreakpoint()
     var uiState by remember { mutableStateOf(CreatePageUiState()) }
 
@@ -161,13 +161,13 @@ fun CreateScreen() {
                     onClick = {
                         uiState = uiState.copy(content = getTextAreaValueById(id = Id.EDITOR))
 
-                        if (
-                            uiState.title.isNotEmpty() &&
-                            uiState.subtitle.isNotEmpty() &&
-                            uiState.thumbnail.isNotEmpty() &&
-                            uiState.content.isNotEmpty()
-                        ) {
-                            scope.launch {
+                        scope.launch {
+                            if (
+                                uiState.title.isNotEmpty() &&
+                                uiState.subtitle.isNotEmpty() &&
+                                uiState.thumbnail.isNotEmpty() &&
+                                uiState.content.isNotEmpty()
+                            ) {
                                 addPost(
                                     Post(
                                         author = localStorage["username"].toString(),
@@ -182,13 +182,21 @@ fun CreateScreen() {
                                         sponsored = uiState.sponsored
                                     )
                                 )
+                            } else {
+                                uiState = uiState.copy(messagePopup = true)
+                                delay(2000)
+                                uiState = uiState.copy(messagePopup = false)
                             }
-                        } else {
-
                         }
                     }
                 )
             }
         }
+    }
+    if (uiState.messagePopup) {
+        MessagePopup(
+            message = "Please fill out all fields.",
+            onDialogDismiss = { uiState = uiState.copy(messagePopup = false) }
+        )
     }
 }
