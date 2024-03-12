@@ -56,10 +56,11 @@ fun MyPostsScreen() {
     val scope = rememberCoroutineScope()
 
     val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
+    val selectedPosts = remember { mutableStateListOf<String>() }
+
     var postsToSkip by remember { mutableStateOf(0) }
     var showMoreVisibility by remember { mutableStateOf(false) }
 
-    var switchText by remember { mutableStateOf("Select") }
     var selectableMode by remember { mutableStateOf(false) }
 
     val fetchMyPosts: suspend () -> Unit = remember {
@@ -113,15 +114,16 @@ fun MyPostsScreen() {
                 LabeledSwitch(
                     modifier = Modifier.margin(right = 8.px),
                     checked = selectableMode,
-                    text = switchText,
+                    text = if (!selectableMode) {
+                        "Select"
+                    } else if (selectedPosts.size == 1 || selectedPosts.size == 0) {
+                        "${selectedPosts.size} Post Selected"
+                    } else {
+                        "${selectedPosts.size} Posts Selected"
+                    },
                     onCheckedChange = {
                         selectableMode = it
-
-                        if (!selectableMode) {
-                            switchText = "Select"
-                        } else {
-                            switchText = "0 Posts Selected"
-                        }
+                        selectedPosts.clear()
                     }
                 )
                 Button(
@@ -135,8 +137,8 @@ fun MyPostsScreen() {
                 breakpoint = breakpoint,
                 posts = myPosts,
                 selectableMode = selectableMode,
-                onSelect = { },
-                onDeselect = { },
+                onSelect = { selectedPosts.add(it) },
+                onDeselect = { selectedPosts.remove(it) },
                 showMoreVisibility = showMoreVisibility,
                 onShowMore = { scope.launch { fetchMyPosts() } },
                 onClick = {}
