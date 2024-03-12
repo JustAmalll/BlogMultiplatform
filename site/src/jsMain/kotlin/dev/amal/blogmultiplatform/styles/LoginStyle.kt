@@ -13,10 +13,11 @@ import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.ms
 import org.jetbrains.compose.web.css.px
 
-val LoginInputStyle by ComponentStyle {
+val LoginInputStyle by ComponentStyle(
+    extraModifiers = Modifier.outline(0.px)
+) {
     base {
         Modifier
-            .outline(0.px)
             .border(
                 width = 2.px,
                 style = LineStyle.Solid,
@@ -25,9 +26,7 @@ val LoginInputStyle by ComponentStyle {
             .transition(CSSTransition(property = "border", duration = 300.ms))
     }
     focus {
-        Modifier
-            .outline(0.px)
-            .border(
+        Modifier.border(
             width = 2.px,
             style = LineStyle.Solid,
             color = JsTheme.Primary.rgb

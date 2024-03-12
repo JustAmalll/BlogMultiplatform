@@ -5,12 +5,10 @@ import com.varabyte.kobweb.browser.file.loadDataUrlFromDisk
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Colors
-import com.varabyte.kobweb.compose.ui.modifiers.disabled
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
-import com.varabyte.kobweb.compose.ui.thenIf
 import dev.amal.blogmultiplatform.components.Button
 import dev.amal.blogmultiplatform.components.Input
 import dev.amal.blogmultiplatform.models.JsTheme
@@ -33,14 +31,11 @@ fun ThumbnailUploader(
         Input(
             modifier = Modifier
                 .fillMaxSize()
-                .margin(right = 12.px)
-                .thenIf(
-                    condition = thumbnailInputDisabled,
-                    other = Modifier.disabled()
-                ),
+                .margin(right = 12.px),
             value = thumbnailInput,
             onValueChanged = onThumbnailInputChanged,
-            placeholder = "Thumbnail"
+            placeholder = "Thumbnail",
+            disabled = thumbnailInputDisabled
         )
         Button(
             text = "Upload",
