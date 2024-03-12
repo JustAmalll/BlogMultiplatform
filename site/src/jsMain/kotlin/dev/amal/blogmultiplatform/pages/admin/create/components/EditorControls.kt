@@ -80,6 +80,8 @@ fun EditorControls(
 
                         document.getElementById(Id.EDITOR_PREVIEW)?.innerHTML =
                             getTextAreaValueById(id = Id.EDITOR)
+
+                        js("hljs.highlightAll()") as Unit
                     }
                 )
             }
