@@ -7,15 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.CSSTransition
-import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
-import com.varabyte.kobweb.compose.ui.modifiers.onClick
 import com.varabyte.kobweb.compose.ui.modifiers.onFocusIn
 import com.varabyte.kobweb.compose.ui.modifiers.onFocusOut
 import com.varabyte.kobweb.compose.ui.modifiers.onKeyDown
@@ -43,35 +40,24 @@ fun SearchBar(
         }
     }
 
-    if (breakpoint >= Breakpoint.SM) {
-        Box(contentAlignment = Alignment.CenterStart) {
-            Input(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusIn { focused = true }
-                    .onFocusOut { focused = false }
-                    .onKeyDown { if (it.key == "Enter") onEnterClick() },
-                value = "",
-                onValueChanged = {},
-                placeholder = "Search...",
-                borderRadius = 100.px,
-                paddingLeft = 40.px
-            )
-            FaMagnifyingGlass(
-                modifier = Modifier
-                    .margin(left = 14.px)
-                    .color(if (focused) JsTheme.Primary.rgb else JsTheme.DarkGray.rgb)
-                    .transition(CSSTransition(property = "color", duration = 200.ms)),
-                size = IconSize.SM
-            )
-        }
-    } else {
+    Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
+        Input(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusIn { focused = true }
+                .onFocusOut { focused = false }
+                .onKeyDown { if (it.key == "Enter") onEnterClick() },
+            value = "",
+            onValueChanged = {},
+            placeholder = "Search...",
+            borderRadius = 100.px,
+            paddingLeft = 40.px
+        )
         FaMagnifyingGlass(
             modifier = Modifier
-                .margin(right = 14.px)
-                .color(JsTheme.Primary.rgb)
-                .cursor(Cursor.Pointer)
-                .onClick { onSearchIconClick(true) },
+                .margin(left = 14.px)
+                .color(if (focused) JsTheme.Primary.rgb else JsTheme.DarkGray.rgb)
+                .transition(CSSTransition(property = "color", duration = 200.ms)),
             size = IconSize.SM
         )
     }

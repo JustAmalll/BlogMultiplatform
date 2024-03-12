@@ -8,10 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.varabyte.kobweb.compose.css.CSSTransition
-import com.varabyte.kobweb.compose.css.TransitionProperty
+import com.varabyte.kobweb.compose.css.Visibility
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
-import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -20,7 +18,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.padding
-import com.varabyte.kobweb.compose.ui.modifiers.transition
+import com.varabyte.kobweb.compose.ui.modifiers.visibility
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.style.breakpoint.Breakpoint
@@ -38,7 +36,6 @@ import dev.amal.blogmultiplatform.util.deleteSelectedPosts
 import dev.amal.blogmultiplatform.util.fetchMyPosts
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.web.css.ms
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 
@@ -86,25 +83,15 @@ fun MyPostsScreen() {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
+            SearchBar(
+                breakpoint = breakpoint,
                 modifier = Modifier
                     .fillMaxWidth(if (breakpoint > Breakpoint.MD) 30.percent else 50.percent)
+                    .visibility(if (selectableMode) Visibility.Hidden else Visibility.Visible)
                     .margin(bottom = 24.px),
-                contentAlignment = Alignment.Center
-            ) {
-                SearchBar(
-                    breakpoint = breakpoint,
-                    modifier = Modifier
-                        .transition(
-                            CSSTransition(
-                                property = TransitionProperty.All,
-                                duration = 200.ms
-                            )
-                        ),
-                    onEnterClick = {},
-                    onSearchIconClick = {}
-                )
-            }
+                onEnterClick = {},
+                onSearchIconClick = {}
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth(if (breakpoint > Breakpoint.MD) 80.percent else 90.percent)
