@@ -34,4 +34,5 @@ object Res {
 
 object Id {
     const val EDITOR = "editor"
+    const val EDITOR_PREVIEW = "editor_preview"
 }
