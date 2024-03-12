@@ -1,14 +1,18 @@
 package dev.amal.blogmultiplatform.data
 
 import com.mongodb.client.model.Filters
+import com.mongodb.client.model.Indexes.descending
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.varabyte.kobweb.api.data.add
 import com.varabyte.kobweb.api.init.InitApi
 import com.varabyte.kobweb.api.init.InitApiContext
+import dev.amal.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import dev.amal.blogmultiplatform.models.Post
+import dev.amal.blogmultiplatform.models.PostWithoutDetails
 import dev.amal.blogmultiplatform.models.User
 import dev.amal.blogmultiplatform.util.Constants.DATABASE_NAME
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.toList
 
 @InitApi
 fun initMongoDB(context: InitApiContext) {
@@ -46,4 +50,15 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
 
     override suspend fun addPost(post: Post): Boolean =
         postCollection.insertOne(post).wasAcknowledged()
+
+    override suspend fun readMyPosts(
+        skip: Int,
+        author: String
+    ): List<PostWithoutDetails> = postCollection
+        .withDocumentClass(PostWithoutDetails::class.java)
+        .find(Filters.eq(PostWithoutDetails::author.name, author))
+        .sort(descending(PostWithoutDetails::date.name))
+        .skip(skip)
+        .limit(POSTS_PER_PAGE)
+        .toList()
 }

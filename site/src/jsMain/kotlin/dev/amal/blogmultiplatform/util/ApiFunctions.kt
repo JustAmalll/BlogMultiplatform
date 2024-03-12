@@ -2,6 +2,8 @@ package dev.amal.blogmultiplatform.util
 
 import com.varabyte.kobweb.browser.api
 import com.varabyte.kobweb.browser.http.http
+import dev.amal.blogmultiplatform.models.Constants.AUTHOR_PARAM
+import dev.amal.blogmultiplatform.models.Constants.SKIP_PARAM
 import dev.amal.blogmultiplatform.models.Post
 import dev.amal.blogmultiplatform.models.RandomJoke
 import dev.amal.blogmultiplatform.models.User
@@ -65,6 +67,19 @@ suspend fun addPost(post: Post): Boolean = try {
 } catch (e: Exception) {
     println(e.message)
     false
+}
+
+suspend fun fetchMyPosts(skip: Int): List<Post> = try {
+    window.api.tryGet(
+        apiPath = buildString {
+            append("readmyposts")
+            append("?${SKIP_PARAM}=$skip")
+            append("&${AUTHOR_PARAM}=${localStorage["username"]}")
+        }
+    )?.decodeToString().parseData()
+} catch (exception: Exception) {
+    println(exception.message)
+    emptyList()
 }
 
 inline fun <reified T> String?.parseData(): T =
