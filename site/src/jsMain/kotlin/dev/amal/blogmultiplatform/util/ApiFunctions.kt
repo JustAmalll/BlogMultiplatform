@@ -5,6 +5,7 @@ import com.varabyte.kobweb.browser.http.http
 import dev.amal.blogmultiplatform.models.Constants.AUTHOR_PARAM
 import dev.amal.blogmultiplatform.models.Constants.SKIP_PARAM
 import dev.amal.blogmultiplatform.models.Post
+import dev.amal.blogmultiplatform.models.PostWithoutDetails
 import dev.amal.blogmultiplatform.models.RandomJoke
 import dev.amal.blogmultiplatform.models.User
 import dev.amal.blogmultiplatform.models.UserWithoutPassword
@@ -69,7 +70,7 @@ suspend fun addPost(post: Post): Boolean = try {
     false
 }
 
-suspend fun fetchMyPosts(skip: Int): List<Post> = try {
+suspend fun fetchMyPosts(skip: Int): List<PostWithoutDetails> = try {
     window.api.tryGet(
         apiPath = buildString {
             append("readmyposts")

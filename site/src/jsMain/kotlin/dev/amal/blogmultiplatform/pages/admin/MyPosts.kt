@@ -1,7 +1,9 @@
 package dev.amal.blogmultiplatform.pages.admin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,9 +28,12 @@ import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
 import dev.amal.blogmultiplatform.components.AdminPageLayout
 import dev.amal.blogmultiplatform.components.Button
 import dev.amal.blogmultiplatform.components.LabeledSwitch
+import dev.amal.blogmultiplatform.components.PostsView
 import dev.amal.blogmultiplatform.components.SearchBar
 import dev.amal.blogmultiplatform.models.JsTheme
+import dev.amal.blogmultiplatform.models.PostWithoutDetails
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
+import dev.amal.blogmultiplatform.util.fetchMyPosts
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import org.jetbrains.compose.web.css.ms
 import org.jetbrains.compose.web.css.percent
@@ -48,8 +53,13 @@ fun MyPostsScreen() {
     val breakpoint = rememberBreakpoint()
     val scope = rememberCoroutineScope()
 
+    val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
     var switchText by remember { mutableStateOf("Select") }
     var selectableMode by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        myPosts.addAll(fetchMyPosts(skip = 0))
+    }
 
     AdminPageLayout {
         Column(
@@ -107,6 +117,16 @@ fun MyPostsScreen() {
                     bgColor = JsTheme.Red.rgb
                 )
             }
+            PostsView(
+                breakpoint = breakpoint,
+                posts = myPosts,
+                selectableMode = selectableMode,
+                onSelect = {  },
+                onDeselect = { },
+                showMoreVisibility = false,
+                onShowMore = {},
+                onClick = {}
+            )
         }
     }
 }

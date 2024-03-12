@@ -14,6 +14,7 @@ import kotlinx.browser.document
 import kotlinx.browser.localStorage
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.get
+import kotlin.js.Date
 
 @Composable
 fun isUserLoggedIn(content: @Composable () -> Unit) {
@@ -84,3 +85,5 @@ fun applyControlStyle(
         EditorControl.Image -> onImageClick()
     }
 }
+
+fun Double.parseDateString() = Date(this).toLocaleDateString()
