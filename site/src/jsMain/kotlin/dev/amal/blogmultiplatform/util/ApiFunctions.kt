@@ -63,7 +63,7 @@ suspend fun fetchRandomJoke(): RandomJoke = try {
 suspend fun addPost(post: Post): Boolean = try {
     window.api.tryPost(
         apiPath = "addpost",
-        body = Json.encodeToString(post).encodeToByteArray()
+        body = Json.encodeToString(value = post).encodeToByteArray()
     )?.decodeToString().toBoolean()
 } catch (e: Exception) {
     println(e.message)
@@ -81,6 +81,16 @@ suspend fun fetchMyPosts(skip: Int): List<PostWithoutDetails> = try {
 } catch (exception: Exception) {
     println(exception.message)
     emptyList()
+}
+
+suspend fun deleteSelectedPosts(ids: List<String>): Boolean = try {
+    window.api.tryPost(
+        apiPath = "deleteselectedposts",
+        body = Json.encodeToString(value = ids).encodeToByteArray()
+    )?.decodeToString().toBoolean()
+} catch (exception: Exception) {
+    println(exception.message)
+    false
 }
 
 inline fun <reified T> String?.parseData(): T =

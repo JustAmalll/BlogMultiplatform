@@ -61,4 +61,7 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
         .skip(skip)
         .limit(POSTS_PER_PAGE)
         .toList()
+
+    override suspend fun deleteSelectedPosts(ids: List<String>): Boolean =
+        postCollection.deleteMany(Filters.`in`(Post::_id.name, ids)).wasAcknowledged()
 }

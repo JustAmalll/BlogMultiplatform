@@ -34,6 +34,7 @@ import dev.amal.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.models.PostWithoutDetails
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
+import dev.amal.blogmultiplatform.util.deleteSelectedPosts
 import dev.amal.blogmultiplatform.util.fetchMyPosts
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import kotlinx.coroutines.launch
@@ -126,12 +127,26 @@ fun MyPostsScreen() {
                         selectedPosts.clear()
                     }
                 )
-                Button(
-                    modifier = Modifier.margin(right = 20.px),
-                    text = "Delete",
-                    onClick = {},
-                    bgColor = JsTheme.Red.rgb
-                )
+                if (selectedPosts.isNotEmpty()) {
+                    Button(
+                        modifier = Modifier.margin(right = 20.px),
+                        text = "Delete",
+                        onClick = {
+                            scope.launch {
+                                if (deleteSelectedPosts(ids = selectedPosts)) {
+                                    selectableMode = false
+                                    postsToSkip -= selectedPosts.size
+
+                                    selectedPosts.forEach { deletedPostId ->
+                                        myPosts.removeAll { it._id == deletedPostId }
+                                    }
+                                    selectedPosts.clear()
+                                }
+                            }
+                        },
+                        bgColor = JsTheme.Red.rgb
+                    )
+                }
             }
             PostsView(
                 breakpoint = breakpoint,

@@ -38,3 +38,16 @@ suspend fun readMyPosts(
         context.res.setBody(exception.message)
     }
 }
+
+@Api(routeOverride = "deleteselectedposts")
+suspend fun deleteSelectedPosts(
+    context: ApiContext,
+    database: MongoDB = context.data.getValue<MongoDB>()
+) {
+    try {
+        val request = context.req.getBody<List<String>>()
+        context.res.setBody(request?.let { database.deleteSelectedPosts(ids = it) })
+    } catch (exception: Exception) {
+        context.res.setBody(exception.message)
+    }
+}
