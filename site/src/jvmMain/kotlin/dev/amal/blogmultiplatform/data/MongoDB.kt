@@ -51,6 +51,9 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
     override suspend fun addPost(post: Post): Boolean =
         postCollection.insertOne(post).wasAcknowledged()
 
+    override suspend fun readSelectedPost(id: String): Post? =
+        postCollection.find(Filters.eq(Post::_id.name, id)).firstOrNull()
+
     override suspend fun readMyPosts(
         skip: Int,
         author: String

@@ -28,7 +28,7 @@ import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.styles.EditorKeyStyle
 import dev.amal.blogmultiplatform.util.Id
 import dev.amal.blogmultiplatform.util.applyControlStyle
-import dev.amal.blogmultiplatform.util.getTextAreaValueById
+import dev.amal.blogmultiplatform.util.getTextAreaById
 import kotlinx.browser.document
 import org.jetbrains.compose.web.css.px
 
@@ -79,7 +79,7 @@ fun EditorControls(
                         onEditorVisibilityChange()
 
                         document.getElementById(Id.EDITOR_PREVIEW)?.innerHTML =
-                            getTextAreaValueById(id = Id.EDITOR)
+                            getTextAreaById(id = Id.EDITOR).value
 
                         js("hljs.highlightAll()") as Unit
                     }

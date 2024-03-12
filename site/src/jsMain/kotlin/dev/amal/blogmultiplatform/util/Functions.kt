@@ -40,8 +40,8 @@ fun logout() {
     localStorage.removeItem("username")
 }
 
-fun getTextAreaValueById(id: String): String =
-    (document.getElementById(elementId = id) as HTMLTextAreaElement).value
+fun getTextAreaById(id: String): HTMLTextAreaElement =
+    document.getElementById(elementId = id) as HTMLTextAreaElement
 
 fun getSelectedIntRange(editor: HTMLTextAreaElement): IntRange? {
     val start = editor.selectionStart ?: return null
@@ -50,13 +50,13 @@ fun getSelectedIntRange(editor: HTMLTextAreaElement): IntRange? {
 }
 
 fun getSelectedText(): String? {
-    val editor = document.getElementById(Id.EDITOR) as? HTMLTextAreaElement ?: return null
+    val editor = getTextAreaById(id = Id.EDITOR)
     val range = getSelectedIntRange(editor = editor) ?: return null
     return editor.value.substring(range)
 }
 
 fun applyStyle(controlStyle: ControlStyle) {
-    val editor = document.getElementById(Id.EDITOR) as? HTMLTextAreaElement ?: return
+    val editor = getTextAreaById(id = Id.EDITOR)
     val editorPreview = document.getElementById(Id.EDITOR_PREVIEW) ?: return
 
     editor.value = editor.value.replaceRange(

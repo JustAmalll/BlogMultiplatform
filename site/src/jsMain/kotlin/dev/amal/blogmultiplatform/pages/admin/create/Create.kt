@@ -1,6 +1,7 @@
 package dev.amal.blogmultiplatform.pages.admin.create
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import dev.amal.blogmultiplatform.components.ControlPopup
 import dev.amal.blogmultiplatform.components.Input
 import dev.amal.blogmultiplatform.components.LabeledSwitch
 import dev.amal.blogmultiplatform.components.MessagePopup
+import dev.amal.blogmultiplatform.models.Constants.POST_ID_PARAM
 import dev.amal.blogmultiplatform.models.ControlStyle
 import dev.amal.blogmultiplatform.models.EditorControl
 import dev.amal.blogmultiplatform.models.Post
@@ -41,8 +43,9 @@ import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.Id
 import dev.amal.blogmultiplatform.util.addPost
 import dev.amal.blogmultiplatform.util.applyStyle
+import dev.amal.blogmultiplatform.util.fetchSelectedPost
 import dev.amal.blogmultiplatform.util.getSelectedText
-import dev.amal.blogmultiplatform.util.getTextAreaValueById
+import dev.amal.blogmultiplatform.util.getTextAreaById
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
 import kotlinx.browser.localStorage
 import kotlinx.coroutines.delay
@@ -65,6 +68,26 @@ fun CreateScreen() {
     val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
     var uiState by remember { mutableStateOf(CreatePageUiState()) }
+
+    LaunchedEffect(context.route) {
+        context.route.params[POST_ID_PARAM]?.let { postId ->
+            val response = fetchSelectedPost(id = postId) ?: return@let
+            getTextAreaById(id = Id.EDITOR).value = response.content
+
+            uiState = uiState.copy(
+                id = response._id,
+                title = response.title,
+                subtitle = response.subtitle,
+                content = response.content,
+                category = response.category,
+                thumbnail = response.thumbnail,
+                buttonText = "Update",
+                main = response.main,
+                popular = response.popular,
+                sponsored = response.sponsored
+            )
+        }
+    }
 
     AdminPageLayout {
         Box(
@@ -167,7 +190,7 @@ fun CreateScreen() {
                         .margin(top = 24.px),
                     text = uiState.buttonText,
                     onClick = {
-                        uiState = uiState.copy(content = getTextAreaValueById(id = Id.EDITOR))
+                        uiState = uiState.copy(content = getTextAreaById(id = Id.EDITOR).value)
 
                         scope.launch {
                             if (

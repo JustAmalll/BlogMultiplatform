@@ -3,6 +3,7 @@ package dev.amal.blogmultiplatform.util
 import com.varabyte.kobweb.browser.api
 import com.varabyte.kobweb.browser.http.http
 import dev.amal.blogmultiplatform.models.Constants.AUTHOR_PARAM
+import dev.amal.blogmultiplatform.models.Constants.POST_ID_PARAM
 import dev.amal.blogmultiplatform.models.Constants.SKIP_PARAM
 import dev.amal.blogmultiplatform.models.Post
 import dev.amal.blogmultiplatform.models.PostWithoutDetails
@@ -91,6 +92,15 @@ suspend fun deleteSelectedPosts(ids: List<String>): Boolean = try {
 } catch (exception: Exception) {
     println(exception.message)
     false
+}
+
+suspend fun fetchSelectedPost(id: String): Post? = try {
+    window.api.tryGet(
+        apiPath = "readselectedpost?${POST_ID_PARAM}=$id"
+    )?.decodeToString()?.parseData()
+} catch (exception: Exception) {
+    println(exception.message)
+    null
 }
 
 inline fun <reified T> String?.parseData(): T =

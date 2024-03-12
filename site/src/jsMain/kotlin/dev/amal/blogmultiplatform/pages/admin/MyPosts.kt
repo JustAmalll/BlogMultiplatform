@@ -31,6 +31,7 @@ import dev.amal.blogmultiplatform.components.SearchBar
 import dev.amal.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.models.PostWithoutDetails
+import dev.amal.blogmultiplatform.navigation.Screen
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.deleteSelectedPosts
 import dev.amal.blogmultiplatform.util.fetchMyPosts
@@ -143,7 +144,7 @@ fun MyPostsScreen() {
                 onDeselect = { selectedPosts.remove(it) },
                 showMoreVisibility = showMoreVisibility,
                 onShowMore = { scope.launch { fetchMyPosts() } },
-                onClick = {}
+                onClick = { context.router.navigateTo(Screen.AdminCreate.passPostId(id = it)) }
             )
         }
     }

@@ -5,6 +5,7 @@ import com.varabyte.kobweb.api.ApiContext
 import com.varabyte.kobweb.api.data.getValue
 import dev.amal.blogmultiplatform.data.MongoDB
 import dev.amal.blogmultiplatform.models.Constants.AUTHOR_PARAM
+import dev.amal.blogmultiplatform.models.Constants.POST_ID_PARAM
 import dev.amal.blogmultiplatform.models.Constants.SKIP_PARAM
 import dev.amal.blogmultiplatform.models.Post
 import dev.amal.blogmultiplatform.util.getBody
@@ -36,6 +37,24 @@ suspend fun readMyPosts(
         context.res.setBody(database.readMyPosts(skip = skip, author = author))
     } catch (exception: Exception) {
         context.res.setBody(exception.message)
+    }
+}
+
+@Api(routeOverride = "readselectedpost")
+suspend fun readSelectedPost(
+    context: ApiContext,
+    database: MongoDB = context.data.getValue<MongoDB>()
+) {
+    val postId = context.req.params[POST_ID_PARAM]
+
+    if (!postId.isNullOrEmpty()) {
+        try {
+            context.res.setBody(data = database.readSelectedPost(id = postId))
+        } catch (exception: Exception) {
+            context.res.setBody(data = exception.message)
+        }
+    } else {
+        context.res.setBody(data = "Selected Post does not exist.")
     }
 }
 
