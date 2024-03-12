@@ -31,3 +31,7 @@ object Res {
         const val CHECKMARK = "/checkmark.svg"
     }
 }
+
+object Id {
+    const val EDITOR = "editor"
+}

@@ -10,6 +10,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height
+import com.varabyte.kobweb.compose.ui.modifiers.id
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
@@ -20,6 +21,7 @@ import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.style.toModifier
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.styles.LoginInputStyle
+import dev.amal.blogmultiplatform.util.Id
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.TextArea
@@ -31,6 +33,7 @@ fun Editor(editorVisibility: Boolean) {
         TextArea(
             attrs = LoginInputStyle
                 .toModifier()
+                .id(Id.EDITOR)
                 .fillMaxWidth()
                 .height(400.px)
                 .resize(Resize.None)

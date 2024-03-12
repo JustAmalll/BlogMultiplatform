@@ -6,6 +6,7 @@ data class CreatePageUiState(
     val id: String = "",
     val title: String = "",
     val subtitle: String = "",
+    val thumbnailInput: String = "",
     val thumbnail: String = "",
     val thumbnailInputDisabled: Boolean = true,
     val content: String = "",

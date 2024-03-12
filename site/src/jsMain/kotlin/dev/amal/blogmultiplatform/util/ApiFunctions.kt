@@ -2,6 +2,7 @@ package dev.amal.blogmultiplatform.util
 
 import com.varabyte.kobweb.browser.api
 import com.varabyte.kobweb.browser.http.http
+import dev.amal.blogmultiplatform.models.Post
 import dev.amal.blogmultiplatform.models.RandomJoke
 import dev.amal.blogmultiplatform.models.User
 import dev.amal.blogmultiplatform.models.UserWithoutPassword
@@ -54,6 +55,16 @@ suspend fun fetchRandomJoke(): RandomJoke = try {
 } catch (exception: Exception) {
     println(exception.message)
     RandomJoke(id = -1, joke = exception.message.toString())
+}
+
+suspend fun addPost(post: Post): Boolean = try {
+    window.api.tryPost(
+        apiPath = "addpost",
+        body = Json.encodeToString(post).encodeToByteArray()
+    )?.decodeToString().toBoolean()
+} catch (e: Exception) {
+    println(e.message)
+    false
 }
 
 inline fun <reified T> String?.parseData(): T =

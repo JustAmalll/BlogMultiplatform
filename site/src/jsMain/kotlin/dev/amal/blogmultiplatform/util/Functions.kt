@@ -8,7 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.core.rememberPageContext
 import dev.amal.blogmultiplatform.navigation.Screen
+import kotlinx.browser.document
 import kotlinx.browser.localStorage
+import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.get
 
 @Composable
@@ -34,3 +36,6 @@ fun logout() {
     localStorage.removeItem("userId")
     localStorage.removeItem("username")
 }
+
+fun getTextAreaValueById(id: String): String =
+    (document.getElementById(elementId = id) as HTMLTextAreaElement).value

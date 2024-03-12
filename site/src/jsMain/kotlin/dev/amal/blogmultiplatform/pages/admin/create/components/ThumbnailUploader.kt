@@ -19,8 +19,9 @@ import org.jetbrains.compose.web.css.px
 
 @Composable
 fun ThumbnailUploader(
-    thumbnail: String,
+    thumbnailInput: String,
     thumbnailInputDisabled: Boolean,
+    onThumbnailInputChanged: (String) -> Unit,
     onThumbnailSelect: (String, String) -> Unit
 ) {
     Row(
@@ -37,8 +38,8 @@ fun ThumbnailUploader(
                     condition = thumbnailInputDisabled,
                     other = Modifier.disabled()
                 ),
-            value = "",
-            onValueChanged = {},
+            value = thumbnailInput,
+            onValueChanged = onThumbnailInputChanged,
             placeholder = "Thumbnail"
         )
         Button(
