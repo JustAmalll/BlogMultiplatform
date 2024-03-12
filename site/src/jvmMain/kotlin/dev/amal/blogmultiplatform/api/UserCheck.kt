@@ -3,12 +3,11 @@ package dev.amal.blogmultiplatform.api
 import com.varabyte.kobweb.api.Api
 import com.varabyte.kobweb.api.ApiContext
 import com.varabyte.kobweb.api.data.getValue
-import com.varabyte.kobweb.api.http.setBodyText
 import dev.amal.blogmultiplatform.data.MongoDB
 import dev.amal.blogmultiplatform.models.User
 import dev.amal.blogmultiplatform.models.UserWithoutPassword
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
+import dev.amal.blogmultiplatform.util.getBody
+import dev.amal.blogmultiplatform.util.setBody
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 
@@ -18,9 +17,8 @@ suspend fun userCheck(
     database: MongoDB = context.data.getValue<MongoDB>()
 ) {
     try {
-        val userRequest = context.req.body?.decodeToString()?.let {
-            Json.decodeFromString<User>(it)
-        }
+        val userRequest = context.req.getBody<User>()
+
         val user = userRequest?.let {
             database.checkUserExistence(
                 User(
@@ -29,20 +27,12 @@ suspend fun userCheck(
                 )
             )
         }
-        if (user != null) {
-            context.res.setBodyText(
-                Json.encodeToString<UserWithoutPassword>(
-                    UserWithoutPassword(
-                        _id = user._id,
-                        username = user.username
-                    )
-                )
-            )
-        } else {
-            context.res.setBodyText(text = Json.encodeToString(value = "User doesn't exist."))
-        }
+        context.res.setBody(
+            if (user != null) UserWithoutPassword(_id = user._id, username = user.username)
+            else "User doesn't exist."
+        )
     } catch (exception: Exception) {
-        context.res.setBodyText(text = Json.encodeToString(value = exception.message))
+        context.res.setBody(data = exception.message)
     }
 }
 
@@ -52,13 +42,10 @@ suspend fun checkUserId(
     database: MongoDB = context.data.getValue<MongoDB>()
 ) {
     try {
-        val idRequest = context.req.body?.decodeToString()?.let {
-            Json.decodeFromString<String>(it)
-        }
-        val result = idRequest?.let { database.checkUserId(it) }
-        context.res.setBodyText(Json.encodeToString(value = result ?: false))
+        val idRequest = context.req.getBody<String>()
+        context.res.setBody(data = idRequest?.let { database.checkUserId(it) } ?: false)
     } catch (exception: Exception) {
-        context.res.setBodyText(Json.encodeToString(value = false))
+        context.res.setBody(data = false)
     }
 }
 

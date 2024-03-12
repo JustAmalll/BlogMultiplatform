@@ -5,6 +5,7 @@ import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.varabyte.kobweb.api.data.add
 import com.varabyte.kobweb.api.init.InitApi
 import com.varabyte.kobweb.api.init.InitApiContext
+import dev.amal.blogmultiplatform.models.Post
 import dev.amal.blogmultiplatform.models.User
 import dev.amal.blogmultiplatform.util.Constants.DATABASE_NAME
 import kotlinx.coroutines.flow.firstOrNull
@@ -22,6 +23,7 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
     private val client = MongoClient.create()
     private val database = client.getDatabase(DATABASE_NAME)
     private val userCollection = database.getCollection<User>("user")
+    private val postCollection = database.getCollection<Post>("post")
 
     override suspend fun checkUserExistence(user: User): User? = try {
         userCollection.find(
@@ -41,4 +43,7 @@ class MongoDB(private val context: InitApiContext) : MongoRepository {
         context.logger.error(message = exception.message.toString())
         false
     }
+
+    override suspend fun addPost(post: Post): Boolean =
+        postCollection.insertOne(post).wasAcknowledged()
 }
