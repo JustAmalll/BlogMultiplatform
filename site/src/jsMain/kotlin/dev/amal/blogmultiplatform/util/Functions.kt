@@ -71,7 +71,7 @@ fun applyControlStyle(
     onImageClick: () -> Unit
 ) {
     val selectedText = getSelectedText()
-    if (selectedText.isNullOrEmpty()) return
+    if (selectedText.isNullOrEmpty() && editorControl != EditorControl.Image) return
 
     when (editorControl) {
         EditorControl.Bold -> applyStyle(ControlStyle.Bold(selectedText = selectedText))

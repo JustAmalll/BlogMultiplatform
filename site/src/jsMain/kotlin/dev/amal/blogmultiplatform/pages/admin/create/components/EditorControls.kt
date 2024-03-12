@@ -26,7 +26,10 @@ import dev.amal.blogmultiplatform.components.Button
 import dev.amal.blogmultiplatform.models.EditorControl
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.styles.EditorKeyStyle
+import dev.amal.blogmultiplatform.util.Id
 import dev.amal.blogmultiplatform.util.applyControlStyle
+import dev.amal.blogmultiplatform.util.getTextAreaValueById
+import kotlinx.browser.document
 import org.jetbrains.compose.web.css.px
 
 @Composable
@@ -72,7 +75,12 @@ fun EditorControls(
                     text = "Preview",
                     bgColor = if (editorVisibility) JsTheme.LightGray.rgb else JsTheme.Primary.rgb,
                     textColor = if (editorVisibility) JsTheme.DarkGray.rgb else Colors.White,
-                    onClick = { onEditorVisibilityChange() }
+                    onClick = {
+                        onEditorVisibilityChange()
+
+                        document.getElementById(Id.EDITOR_PREVIEW)?.innerHTML =
+                            getTextAreaValueById(id = Id.EDITOR)
+                    }
                 )
             }
         }

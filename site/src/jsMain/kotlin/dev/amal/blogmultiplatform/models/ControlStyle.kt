@@ -29,12 +29,8 @@ sealed class ControlStyle(val style: String) {
         style = "<div style=\"background-color:#0d1117;padding:12px;border-radius:6px;\"><pre><code class=\"language-kotlin\"> $selectedText </code></pre></div>"
     )
 
-    data class Image(
-        val selectedText: String?,
-        val imageUrl: String,
-        val alt: String
-    ) : ControlStyle(
-        style = "<img src=\"$imageUrl\" alt=\"$alt\" style=\"max-width: 100%\">$selectedText</img>"
+    data class Image(val imageUrl: String, val alt: String) : ControlStyle(
+        style = "<img src=\"$imageUrl\" alt=\"$alt\" style=\"max-width: 100%\"></img>"
     )
 
     data class Break(val selectedText: String?) : ControlStyle(

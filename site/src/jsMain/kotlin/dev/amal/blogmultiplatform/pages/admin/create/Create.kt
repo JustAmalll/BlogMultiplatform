@@ -219,4 +219,13 @@ fun CreateScreen() {
             }
         )
     }
+    if (uiState.imagePopup) {
+        ControlPopup(
+            editorControl = EditorControl.Image,
+            onDialogDismiss = { uiState = uiState.copy(imagePopup = false) },
+            onAddClick = { imageUrl, description ->
+                applyStyle(ControlStyle.Image(imageUrl = imageUrl, alt = description))
+            }
+        )
+    }
 }
