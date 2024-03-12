@@ -30,11 +30,13 @@ import dev.amal.blogmultiplatform.components.Button
 import dev.amal.blogmultiplatform.components.LabeledSwitch
 import dev.amal.blogmultiplatform.components.PostsView
 import dev.amal.blogmultiplatform.components.SearchBar
+import dev.amal.blogmultiplatform.models.Constants.POSTS_PER_PAGE
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.models.PostWithoutDetails
 import dev.amal.blogmultiplatform.util.Constants.SIDE_PANEL_WIDTH
 import dev.amal.blogmultiplatform.util.fetchMyPosts
 import dev.amal.blogmultiplatform.util.isUserLoggedIn
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.ms
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
@@ -54,11 +56,23 @@ fun MyPostsScreen() {
     val scope = rememberCoroutineScope()
 
     val myPosts = remember { mutableStateListOf<PostWithoutDetails>() }
+    var postsToSkip by remember { mutableStateOf(0) }
+    var showMoreVisibility by remember { mutableStateOf(false) }
+
     var switchText by remember { mutableStateOf("Select") }
     var selectableMode by remember { mutableStateOf(false) }
 
+    val fetchMyPosts: suspend () -> Unit = remember {
+        {
+            val result = fetchMyPosts(skip = postsToSkip)
+            myPosts.addAll(result)
+            postsToSkip += POSTS_PER_PAGE
+            showMoreVisibility = result.size >= POSTS_PER_PAGE
+        }
+    }
+
     LaunchedEffect(Unit) {
-        myPosts.addAll(fetchMyPosts(skip = 0))
+        fetchMyPosts()
     }
 
     AdminPageLayout {
@@ -121,10 +135,10 @@ fun MyPostsScreen() {
                 breakpoint = breakpoint,
                 posts = myPosts,
                 selectableMode = selectableMode,
-                onSelect = {  },
+                onSelect = { },
                 onDeselect = { },
-                showMoreVisibility = false,
-                onShowMore = {},
+                showMoreVisibility = showMoreVisibility,
+                onShowMore = { scope.launch { fetchMyPosts() } },
                 onClick = {}
             )
         }
