@@ -14,6 +14,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.id
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.onKeyDown
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.resize
@@ -21,9 +22,12 @@ import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
 import com.varabyte.kobweb.compose.ui.modifiers.visibility
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.style.toModifier
+import dev.amal.blogmultiplatform.models.ControlStyle
 import dev.amal.blogmultiplatform.models.JsTheme
 import dev.amal.blogmultiplatform.styles.LoginInputStyle
 import dev.amal.blogmultiplatform.util.Id
+import dev.amal.blogmultiplatform.util.applyStyle
+import dev.amal.blogmultiplatform.util.getSelectedText
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.TextArea
@@ -45,6 +49,11 @@ fun Editor(editorVisibility: Boolean) {
                 .padding(all = 20.px)
                 .backgroundColor(JsTheme.LightGray.rgb)
                 .borderRadius(r = 4.px)
+                .onKeyDown {
+                    if (it.code == "Enter" && it.shiftKey) {
+                        applyStyle(ControlStyle.Break(selectedText = getSelectedText()))
+                    }
+                }
                 .visibility(if (editorVisibility) Visibility.Visible else Visibility.Hidden)
                 .fontSize(16.px)
                 .toAttrs { attr("placeholder", "Type here...") }
