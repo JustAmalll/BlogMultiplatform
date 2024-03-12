@@ -69,23 +69,31 @@ fun CreateScreen() {
     val breakpoint = rememberBreakpoint()
     var uiState by remember { mutableStateOf(CreatePageUiState()) }
 
-    LaunchedEffect(context.route) {
-        context.route.params[POST_ID_PARAM]?.let { postId ->
-            val response = fetchSelectedPost(id = postId) ?: return@let
-            getTextAreaById(id = Id.EDITOR).value = response.content
+    val postIdParam = remember(key1 = context.route) {
+        context.route.params[POST_ID_PARAM]
+    }
 
-            uiState = uiState.copy(
-                id = response._id,
-                title = response.title,
-                subtitle = response.subtitle,
-                content = response.content,
-                category = response.category,
-                thumbnail = response.thumbnail,
-                buttonText = "Update",
-                main = response.main,
-                popular = response.popular,
-                sponsored = response.sponsored
-            )
+    LaunchedEffect(key1 = postIdParam) {
+        if (postIdParam != null) {
+            fetchSelectedPost(id = postIdParam)?.let {
+                getTextAreaById(id = Id.EDITOR).value = it.content
+
+                uiState = uiState.copy(
+                    id = it._id,
+                    title = it.title,
+                    subtitle = it.subtitle,
+                    content = it.content,
+                    category = it.category,
+                    thumbnailInput = it.thumbnail,
+                    thumbnail = it.thumbnail,
+                    main = it.main,
+                    popular = it.popular,
+                    sponsored = it.sponsored
+                )
+            }
+        } else {
+            getTextAreaById(id = Id.EDITOR).value = ""
+            uiState = CreatePageUiState()
         }
     }
 
@@ -188,7 +196,7 @@ fun CreateScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .margin(top = 24.px),
-                    text = uiState.buttonText,
+                    text = if (postIdParam == null) "Create" else "Update",
                     onClick = {
                         uiState = uiState.copy(content = getTextAreaById(id = Id.EDITOR).value)
 
